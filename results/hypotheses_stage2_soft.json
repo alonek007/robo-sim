@@ -1,0 +1,143 @@
+{
+ "H1 (arm forward + strafe vs tucked)": {
+  "per_payload": {
+   "0.0": {
+    "ext_median_deg": 0.46485504308471665,
+    "tucked_median_deg": 0.000828865349662033,
+    "ratio": 560.8330029410201,
+    "median_diff_deg": 0.4640261777350546,
+    "ci95": [
+     0.4640261777350546,
+     0.4640261777350546
+    ],
+    "criteria_met": false
+   },
+   "0.2": {
+    "ext_median_deg": 3.754081332546744,
+    "tucked_median_deg": 0.00941491227140245,
+    "ratio": 398.7377921671844,
+    "median_diff_deg": 3.7446664202753417,
+    "ci95": [
+     3.7446664202753417,
+     3.7446664202753417
+    ],
+    "criteria_met": true
+   },
+   "0.4": {
+    "ext_median_deg": 10.598648143963876,
+    "tucked_median_deg": 0.03307237045644962,
+    "ratio": 320.4683546321663,
+    "median_diff_deg": 10.565575773507426,
+    "ci95": [
+     10.565575773507426,
+     10.565575773507426
+    ],
+    "criteria_met": true
+   }
+  },
+  "passed": true
+ },
+ "H2 (arm sideways + forward vs tucked)": {
+  "per_payload": {
+   "0.0": {
+    "ext_median_deg": 0.18725790953174276,
+    "tucked_median_deg": 2.753209722618886e-11,
+    "ratio": 187257909.53174275,
+    "median_diff_deg": 0.18725790950421067,
+    "ci95": [
+     0.18725790950421067,
+     0.18725790950421067
+    ],
+    "criteria_met": false
+   },
+   "0.2": {
+    "ext_median_deg": 2.0852186250687783,
+    "tucked_median_deg": 7.879603595680243e-12,
+    "ratio": 2085218625.0687783,
+    "median_diff_deg": 2.085218625060899,
+    "ci95": [
+     2.085218625060899,
+     2.085218625060899
+    ],
+    "criteria_met": true
+   },
+   "0.4": {
+    "ext_median_deg": 5.740475286268365,
+    "tucked_median_deg": 1.2191602978458113e-12,
+    "ratio": 5740475286.268364,
+    "median_diff_deg": 5.740475286267145,
+    "ci95": [
+     5.740475286267145,
+     5.740475286267145
+    ],
+    "criteria_met": true
+   }
+  },
+  "passed": true
+ },
+ "H3 all poses": {
+  "n_conditions": 48,
+  "frac_improved": 0.625,
+  "median_err_baseline_mm": 30.290873579343412,
+  "median_err_corrected_mm": 18.495738322212727,
+  "reduction_of_median": 0.38939567808220205,
+  "median_of_relative_reduction": 0.20123830036620288,
+  "median_abs_heading_err_baseline_deg": 0.41592338942619156,
+  "median_abs_heading_err_corrected_deg": 0.3937709244973427,
+  "passed": false
+ },
+ "H4 all conditions": {
+  "heading_drift": {
+   "median_no_rule": 0.7166703850571621,
+   "median_rule": 0.048292932715934024,
+   "reduction": 0.932614862113938,
+   "frac_conditions_improved": 0.5
+  },
+  "path_dev": {
+   "median_no_rule": 0.04736542798354533,
+   "median_rule": 0.042483869232238125,
+   "reduction": 0.1030616413516426,
+   "frac_conditions_improved": 0.4583333333333333
+  },
+  "n_conditions": 48,
+  "passed": false
+ },
+ "H4 extended-arm conditions only (forward/side pose, payload >= 0.2)": {
+  "heading_drift": {
+   "median_no_rule": 2.4045157267033535,
+   "median_rule": 0.0675696065029568,
+   "reduction": 0.9718988710481022,
+   "frac_conditions_improved": 0.5625
+  },
+  "path_dev": {
+   "median_no_rule": 0.06998364741067456,
+   "median_rule": 0.04535573498928669,
+   "reduction": 0.3519095293342969,
+   "frac_conditions_improved": 0.5625
+  },
+  "n_conditions": 16,
+  "passed": true
+ },
+ "H3 held-out poses (verdict for stage 2)": {
+  "n_conditions": 24,
+  "frac_improved": 0.5833333333333334,
+  "median_err_baseline_mm": 37.60394613173698,
+  "median_err_corrected_mm": 18.737854566283747,
+  "reduction_of_median": 0.501705100293467,
+  "median_of_relative_reduction": 0.30693092730666016,
+  "median_abs_heading_err_baseline_deg": 0.4942126486693579,
+  "median_abs_heading_err_corrected_deg": 0.5193033611196158,
+  "passed": false
+ },
+ "H3 training poses (in-sample)": {
+  "n_conditions": 24,
+  "frac_improved": 0.6666666666666666,
+  "median_err_baseline_mm": 23.410745282552764,
+  "median_err_corrected_mm": 16.957661189501163,
+  "reduction_of_median": 0.27564624770236873,
+  "median_of_relative_reduction": 0.13490453400930996,
+  "median_abs_heading_err_baseline_deg": 0.2875734830416889,
+  "median_abs_heading_err_corrected_deg": 0.2709479063702054,
+  "passed": false
+ }
+}

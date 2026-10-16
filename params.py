@@ -109,3 +109,13 @@ FIT_TRAIN_POSES = ("tucked", "forward")
 FIT_TEST_POSES = ("side", "raised")        # held out: never used in the fit
 FIT_C_FIXED = C_TRUE                       # c and f_r are not separately identifiable: fit (kappa, f_r/c), c held at this value
 FIT_SAMPLE_DT = 0.5                        # s, spacing of trajectory samples in the residual
+
+# ---- hypothesis pass criteria (fixed in PLAN.md section 6 before any result was seen) ----
+H_CRIT = dict(
+    h12_ratio=2.0,        # median |heading drift| of the extended-arm case >= this x the tucked case ...
+    h12_min_deg=1.0,      # ... and the median difference >= this many degrees, and the 95% CI of the paired difference excludes 0
+    h12_payloads=(0.2, 0.4),
+    h3_frac=0.75,         # corrected end-point error below standard in >= this fraction of conditions ...
+    h3_reduction=0.25,    # ... and the median per-condition end-point error reduced by >= this fraction
+    h4_reduction=0.25,    # posture rule reduces median |heading drift| and median path deviation by >= this fraction
+)

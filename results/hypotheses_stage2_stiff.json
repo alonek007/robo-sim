@@ -1,0 +1,143 @@
+{
+ "H1 (arm forward + strafe vs tucked)": {
+  "per_payload": {
+   "0.0": {
+    "ext_median_deg": 0.03542923132653512,
+    "tucked_median_deg": 0.052214513383378715,
+    "ratio": 0.6785322514910805,
+    "median_diff_deg": -0.016785282056843598,
+    "ci95": [
+     -0.016785282056843598,
+     -0.016785282056843598
+    ],
+    "criteria_met": false
+   },
+   "0.2": {
+    "ext_median_deg": 0.4418244653800996,
+    "tucked_median_deg": 0.008053097053729565,
+    "ratio": 54.86391911488029,
+    "median_diff_deg": 0.43377136832637003,
+    "ci95": [
+     0.43377136832637003,
+     0.43377136832637014
+    ],
+    "criteria_met": false
+   },
+   "0.4": {
+    "ext_median_deg": 1.5397816196658298,
+    "tucked_median_deg": 0.018046869443259266,
+    "ratio": 85.32125887578567,
+    "median_diff_deg": 1.5217347502225707,
+    "ci95": [
+     1.5217347502225707,
+     1.5217347502225707
+    ],
+    "criteria_met": true
+   }
+  },
+  "passed": false
+ },
+ "H2 (arm sideways + forward vs tucked)": {
+  "per_payload": {
+   "0.0": {
+    "ext_median_deg": 0.02794135286769109,
+    "tucked_median_deg": 2.7802489882494793e-11,
+    "ratio": 27941352.867691085,
+    "median_diff_deg": 0.0279413528398886,
+    "ci95": [
+     0.0279413528398886,
+     0.0279413528398886
+    ],
+    "criteria_met": false
+   },
+   "0.2": {
+    "ext_median_deg": 0.16238168989247925,
+    "tucked_median_deg": 2.0691099364327712e-10,
+    "ratio": 162381689.89247924,
+    "median_diff_deg": 0.16238168968556826,
+    "ci95": [
+     0.16238168968556826,
+     0.16238168968556826
+    ],
+    "criteria_met": false
+   },
+   "0.4": {
+    "ext_median_deg": 1.3892828133874684,
+    "tucked_median_deg": 3.793254702230638e-10,
+    "ratio": 1389282813.3874683,
+    "median_diff_deg": 1.389282813008143,
+    "ci95": [
+     1.389282813008143,
+     1.389282813008143
+    ],
+    "criteria_met": true
+   }
+  },
+  "passed": false
+ },
+ "H3 all poses": {
+  "n_conditions": 48,
+  "frac_improved": 0.5833333333333334,
+  "median_err_baseline_mm": 28.72779688942619,
+  "median_err_corrected_mm": 24.42340098250055,
+  "reduction_of_median": 0.14983383248960366,
+  "median_of_relative_reduction": 0.03554208783094186,
+  "median_abs_heading_err_baseline_deg": 0.36576821261580295,
+  "median_abs_heading_err_corrected_deg": 1.4643458243636913,
+  "passed": false
+ },
+ "H4 all conditions": {
+  "heading_drift": {
+   "median_no_rule": 0.32285561642126814,
+   "median_rule": 0.1457667456671555,
+   "reduction": 0.548507945183285,
+   "frac_conditions_improved": 0.4583333333333333
+  },
+  "path_dev": {
+   "median_no_rule": 0.03088779282764385,
+   "median_rule": 0.027360082958611774,
+   "reduction": 0.11421048725355534,
+   "frac_conditions_improved": 0.3333333333333333
+  },
+  "n_conditions": 48,
+  "passed": false
+ },
+ "H4 extended-arm conditions only (forward/side pose, payload >= 0.2)": {
+  "heading_drift": {
+   "median_no_rule": 1.8831525357467167,
+   "median_rule": 0.16182979446388351,
+   "reduction": 0.9140644258009009,
+   "frac_conditions_improved": 0.5
+  },
+  "path_dev": {
+   "median_no_rule": 0.038707794646110745,
+   "median_rule": 0.0339815696424083,
+   "reduction": 0.12210008467060317,
+   "frac_conditions_improved": 0.375
+  },
+  "n_conditions": 16,
+  "passed": false
+ },
+ "H3 held-out poses (verdict for stage 2)": {
+  "n_conditions": 24,
+  "frac_improved": 0.5416666666666666,
+  "median_err_baseline_mm": 25.183079201295616,
+  "median_err_corrected_mm": 37.88879878553122,
+  "reduction_of_median": -0.5045339961279209,
+  "median_of_relative_reduction": 0.012438565342570328,
+  "median_abs_heading_err_baseline_deg": 0.6125548831151552,
+  "median_abs_heading_err_corrected_deg": 2.1622002140620387,
+  "passed": false
+ },
+ "H3 training poses (in-sample)": {
+  "n_conditions": 24,
+  "frac_improved": 0.625,
+  "median_err_baseline_mm": 32.355617729253304,
+  "median_err_corrected_mm": 23.17048257470155,
+  "reduction_of_median": 0.283880692107674,
+  "median_of_relative_reduction": 0.08336453738884718,
+  "median_abs_heading_err_baseline_deg": 0.34950555786388693,
+  "median_abs_heading_err_corrected_deg": 0.6526293553948802,
+  "passed": false
+ }
+}

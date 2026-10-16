@@ -1,0 +1,121 @@
+{
+ "H1 (arm forward + strafe vs tucked)": {
+  "per_payload": {
+   "0.0": {
+    "ext_median_deg": 0.15561351528672773,
+    "tucked_median_deg": 0.1252903299827554,
+    "ratio": 1.242023349353026,
+    "median_diff_deg": 0.025679540427555672,
+    "ci95": [
+     -0.14275582776580104,
+     0.14370459111205652
+    ],
+    "criteria_met": false
+   },
+   "0.2": {
+    "ext_median_deg": 0.3840202717316954,
+    "tucked_median_deg": 0.14252194304199714,
+    "ratio": 2.694464189409315,
+    "median_diff_deg": 0.35408183861420933,
+    "ci95": [
+     -0.23964905038144463,
+     0.5640717186000967
+    ],
+    "criteria_met": false
+   },
+   "0.4": {
+    "ext_median_deg": 1.2838539669475355,
+    "tucked_median_deg": 0.13458023401173916,
+    "ratio": 9.539691889936433,
+    "median_diff_deg": 1.2459738247997916,
+    "ci95": [
+     0.6510654218414784,
+     1.467956823595174
+    ],
+    "criteria_met": true
+   }
+  },
+  "passed": false
+ },
+ "H2 (arm sideways + forward vs tucked)": {
+  "per_payload": {
+   "0.0": {
+    "ext_median_deg": 0.16474731697186876,
+    "tucked_median_deg": 0.12651151097569055,
+    "ratio": 1.3022318340939372,
+    "median_diff_deg": 0.11879845178807596,
+    "ci95": [
+     -0.06065588091598628,
+     0.20321402306167763
+    ],
+    "criteria_met": false
+   },
+   "0.2": {
+    "ext_median_deg": 0.4759180020992804,
+    "tucked_median_deg": 0.12651151097569055,
+    "ratio": 3.761855331810313,
+    "median_diff_deg": 0.4299691369154875,
+    "ci95": [
+     0.2388636263653583,
+     0.5198654386850645
+    ],
+    "criteria_met": false
+   },
+   "0.4": {
+    "ext_median_deg": 1.3757516973151853,
+    "tucked_median_deg": 0.12651151097569055,
+    "ratio": 10.87451795259594,
+    "median_diff_deg": 1.3298028321313924,
+    "ci95": [
+     1.1386973215812652,
+     1.4196991339009686
+    ],
+    "criteria_met": true
+   }
+  },
+  "passed": false
+ },
+ "H3 all poses": {
+  "n_conditions": 48,
+  "frac_improved": 0.875,
+  "median_err_baseline_mm": 20.85176661426642,
+  "median_err_corrected_mm": 2.5101493971022117,
+  "reduction_of_median": 0.8796193414430022,
+  "median_of_relative_reduction": 0.8794343778335971,
+  "median_abs_heading_err_baseline_deg": 0.17744518745064597,
+  "median_abs_heading_err_corrected_deg": 0.1722097939481238,
+  "passed": true
+ },
+ "H4 all conditions": {
+  "heading_drift": {
+   "median_no_rule": 0.1638386732447793,
+   "median_rule": 0.16286877381245554,
+   "reduction": 0.005919844278003284,
+   "frac_conditions_improved": 0.4166666666666667
+  },
+  "path_dev": {
+   "median_no_rule": 0.020851834212672855,
+   "median_rule": 0.020389464104912155,
+   "reduction": 0.022174073659174356,
+   "frac_conditions_improved": 0.5625
+  },
+  "n_conditions": 48,
+  "passed": false
+ },
+ "H4 extended-arm conditions only (forward/side pose, payload >= 0.2)": {
+  "heading_drift": {
+   "median_no_rule": 0.2698252360358203,
+   "median_rule": 0.16286877381245587,
+   "reduction": 0.39639161923744437,
+   "frac_conditions_improved": 0.6875
+  },
+  "path_dev": {
+   "median_no_rule": 0.02336714056672059,
+   "median_rule": 0.021954140712609288,
+   "reduction": 0.06046952343513056,
+   "frac_conditions_improved": 0.75
+  },
+  "n_conditions": 16,
+  "passed": false
+ }
+}
