@@ -13,13 +13,16 @@ def ideal_end(name):
     return P.LEG * np.array([np.cos(a).sum(), np.sin(a).sum()])
 
 
-def _leg_speed(dt):
-    """Speed samples (mid-point) for one leg: ramp up, cruise, ramp down; integrates to P.LEG."""
-    t_cruise = (P.LEG - P.SPEED * P.RAMP_T) / P.SPEED
-    T = t_cruise + 2 * P.RAMP_T
+def trapezoid(distance, vmax, ramp, dt):
+    """Mid-point samples of a trapezoidal speed profile (ramp up, cruise, ramp down) covering `distance`."""
+    T = distance / vmax - ramp + 2 * ramp
     tau = (np.arange(int(round(T / dt))) + 0.5) * dt
-    return np.minimum.reduce([P.SPEED * tau / P.RAMP_T, np.full_like(tau, P.SPEED),
-                              P.SPEED * (T - tau) / P.RAMP_T])
+    return np.minimum.reduce([vmax * tau / ramp, np.full_like(tau, vmax), vmax * (T - tau) / ramp])
+
+
+def _leg_speed(dt):
+    """Speed samples for one leg; integrates to P.LEG."""
+    return trapezoid(P.LEG, P.SPEED, P.RAMP_T, dt)
 
 
 def build(name, dt=P.DT):

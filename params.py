@@ -68,3 +68,32 @@ MODES = {
     "corrected":           ("corrected", False),
     "corrected+posture":   ("corrected", True),
 }
+
+# ---- stage 2: MuJoCo geometry / actuators / numerics (documented choices, not tuned to hypotheses) ----
+CHASSIS_HALF = (0.12, 0.07, 0.02)   # chassis box half-extents (x, y, z)
+CHASSIS_CLEARANCE = 0.03            # bottom of the chassis box above the floor
+BASE_BOX_DIMS = (0.24, 0.16, 0.10)  # box used only for the base inertia tensor
+WHEEL_HUB_MASS = 0.045              # per wheel, hub only
+ROLLER_MASS = 0.0015                # per roller  (wheel total = 0.045 + 10 * 0.0015 = 0.06 kg, part of BASE_MASS)
+WHEEL_HUB_RADIUS = 0.020
+WHEEL_HUB_HALF_WIDTH = 0.012
+ROLLER_RADIUS = 0.006               # capsule cap radius
+ROLLER_END_FACTOR = 1.0             # capsule cylinder half-length = factor * Rc sin(pi/N)/cos(roller angle): neighbouring
+                                    # rollers' ends just meet. Longer rollers (>~1.05) touch the floor two at a time and
+                                    # drop strafe/spin gain to ~0.89/0.93 (sanity-test sweep, step 4)
+ROLLER_DAMPING = 1e-5               # N m s/rad, small so rollers "free-spin" but stay numerically calm
+WHEEL_ARMATURE = 5e-4               # kg m^2, reflected motor inertia
+WHEEL_KV = 0.05                     # N m s/rad: small geared DC motor, tau = kv (w_cmd - w); stall 0.6 N m / no-load 12 rad/s
+WHEEL_TORQUE_LIMIT = 0.6            # N m
+SERVO_BOX_HALF = (0.02, 0.01, 0.02) # servo body, mass SERVO_MASS
+ARM_KP = 20.0                       # N m/rad  position servo gain
+ARM_KV = 1.0                        # N m s/rad
+ARM_TORQUE_LIMIT = 1.0              # N m  (MG996R ~1 N m)
+ARM_DAMPING = 0.2
+ARM_ARMATURE = 1e-3
+PAYLOAD_RADIUS = 0.02
+MJ_TIMESTEP = 0.002                 # s ; log step P.DT must be a multiple of this
+MJ_SOLREF = (0.005, 1.0)            # contact softness
+MJ_SOLIMP = (0.95, 0.99, 0.001)
+MJ_IMPRATIO = 10.0
+SETTLE_T = 1.0                      # s of settling before every logged run
