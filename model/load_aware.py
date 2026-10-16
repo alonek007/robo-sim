@@ -43,3 +43,21 @@ def body_velocity(omega, N, mass, p=TRUE, v_init=None, n_iter=4):
         W = np.array([p.f_r * mass * P.G * vhat[0], p.f_r * mass * P.G * vhat[1], 0.0])
         v = np.linalg.solve(A, b - W)
     return v
+
+
+def body_velocity_batch(omega, N, mass, p=TRUE, n_iter=4):
+    """Vectorised body_velocity for many samples sharing the same loads N and mass. omega: (n,4) -> (n,3)."""
+    omega, N = np.atleast_2d(omega), np.asarray(N, float)
+    rho = P.WHEEL_R * (1.0 - p.kappa * N) * omega                       # (n,4)
+    C = np.diag(p.c * N)
+    A = J.T @ C @ J
+    b = rho @ (J.T @ C).T                                               # (n,3)
+    Ainv = np.linalg.inv(A)
+    v = b @ Ainv.T
+    for _ in range(n_iter):
+        vt = v[:, :2]
+        vhat = vt / np.sqrt((vt ** 2).sum(1, keepdims=True) + P.V_EPS ** 2)
+        W = np.zeros_like(v)
+        W[:, :2] = p.f_r * mass * P.G * vhat
+        v = (b - W) @ Ainv.T
+    return v

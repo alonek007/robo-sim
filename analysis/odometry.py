@@ -3,7 +3,7 @@ import numpy as np
 import params as P
 from model.com import static_state
 from model.mecanum import J_PINV, integrate_pose
-from model.load_aware import body_velocity, TRUE
+from model.load_aware import body_velocity_batch, TRUE
 
 OMEGA = ["omega1", "omega2", "omega3", "omega4"]
 Q = ["q1", "q2", "q3"]
@@ -16,14 +16,12 @@ def body_velocities(log, payload, kind, slip=TRUE):
         return P.WHEEL_R * om @ J_PINV.T
     if kind != "corrected":
         raise ValueError(kind)
-    q = log[Q].values
-    cache, out = {}, np.zeros((len(om), 3))
-    for k in range(len(om)):
-        key = tuple(np.round(q[k], 6))
-        if key not in cache:
-            cache[key] = static_state(q[k], payload)
-        st = cache[key]
-        out[k] = body_velocity(om[k], st["N"], st["M"], slip)
+    q = np.round(log[Q].values, 1)                       # arm encoder resolution 0.1 deg
+    out = np.zeros((len(om), 3))
+    for key in {tuple(r) for r in q}:                       # one batch solve per distinct arm configuration
+        idx = np.all(q == key, axis=1)
+        st = static_state(key, payload)
+        out[idx] = body_velocity_batch(om[idx], st["N"], st["M"], slip)
     return out
 
 

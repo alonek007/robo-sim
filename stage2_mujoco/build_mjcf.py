@@ -56,7 +56,8 @@ def _v(a):
     return " ".join(f"{x:.9g}" for x in a)
 
 
-def build_xml(payload):
+def build_xml(payload, motor=None):
+    kv, tlim = P.WHEEL_MOTORS[motor or P.DEFAULT_MOTOR]
     r_c, half_len = roller_geometry()
     z_axle_floor = P.WHEEL_R
     box_z = P.CHASSIS_CLEARANCE + P.CHASSIS_HALF[2] - z_axle_floor          # chassis box centre, body frame
@@ -111,7 +112,7 @@ def build_xml(payload):
         '</body></body></body>')
 
     act = "".join(
-        f'<velocity name="w_{n}" joint="j_{n}" kv="{P.WHEEL_KV}" forcerange="{-P.WHEEL_TORQUE_LIMIT} {P.WHEEL_TORQUE_LIMIT}" '
+        f'<velocity name="w_{n}" joint="j_{n}" kv="{kv}" forcerange="{-tlim} {tlim}" '
         f'ctrlrange="-40 40"/>' for n in P.WHEEL_NAMES)
     act += "".join(
         f'<position name="a_{j}" joint="{j}" kp="{P.ARM_KP}" kv="{P.ARM_KV}" '

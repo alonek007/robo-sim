@@ -83,8 +83,11 @@ ROLLER_END_FACTOR = 1.0             # capsule cylinder half-length = factor * Rc
                                     # drop strafe/spin gain to ~0.89/0.93 (sanity-test sweep, step 4)
 ROLLER_DAMPING = 1e-5               # N m s/rad, small so rollers "free-spin" but stay numerically calm
 WHEEL_ARMATURE = 5e-4               # kg m^2, reflected motor inertia
-WHEEL_KV = 0.05                     # N m s/rad: small geared DC motor, tau = kv (w_cmd - w); stall 0.6 N m / no-load 12 rad/s
-WHEEL_TORQUE_LIMIT = 0.6            # N m
+# wheel motor models (velocity actuator tau = kv (w_cmd - w), clipped at the torque limit):
+#   soft  = small geared open-loop DC motor (stall 0.6 N m, no-load 12 rad/s)   <- default, used for the main results
+#   stiff = same wheels with a tight encoder speed loop (10x kv, 5x torque)      <- sensitivity run (added at user request)
+WHEEL_MOTORS = {"soft": (0.05, 0.6), "stiff": (0.5, 3.0)}    # (kv [N m s/rad], torque limit [N m])
+DEFAULT_MOTOR = "soft"
 SERVO_BOX_HALF = (0.02, 0.01, 0.02) # servo body, mass SERVO_MASS
 MG996R_STALL_TORQUE = 1.0           # N m (~10-11 kg cm): reference only, used in the pose-feasibility report
 ARM_KP = 100.0                      # N m/rad  position servo gain
@@ -100,3 +103,9 @@ MJ_SOLREF = (0.005, 1.0)            # contact softness
 MJ_SOLIMP = (0.95, 0.99, 0.001)
 MJ_IMPRATIO = 10.0
 SETTLE_T = 1.0                      # s of settling before every logged run
+
+# ---- slip-parameter fit (stage 2): split fixed BEFORE looking at any fit result ----
+FIT_TRAIN_POSES = ("tucked", "forward")
+FIT_TEST_POSES = ("side", "raised")        # held out: never used in the fit
+FIT_C_FIXED = C_TRUE                       # c and f_r are not separately identifiable: fit (kappa, f_r/c), c held at this value
+FIT_SAMPLE_DT = 0.5                        # s, spacing of trajectory samples in the residual

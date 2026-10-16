@@ -1,0 +1,19 @@
+{
+  "motor": "soft",
+  "kappa": -0.002236146040786867,
+  "fr_over_c": 0.0048552742752548065,
+  "c_fixed": 15.0,
+  "f_r_at_fixed_c": 0.07282911412882209,
+  "kappa_se": 0.0001264287536990444,
+  "fr_over_c_se": 6.597664381405921e-05,
+  "hit_bounds": false,
+  "success": true,
+  "rms_train_fit_mm": 12.876891084492723,
+  "rms_train_standard_mm": 29.237034800432834,
+  "rms_test_fit_mm": 17.059890922514644,
+  "rms_test_standard_mm": 33.76285245647159,
+  "truth_stage1": {
+    "kappa": 0.002,
+    "fr_over_c": 0.002
+  }
+}

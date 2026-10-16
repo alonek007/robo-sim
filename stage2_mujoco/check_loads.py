@@ -15,7 +15,7 @@ def main():
     for pose, q in P.POSES.items():
         for pay in P.PAYLOADS:
             ex = {}
-            log = simulate(pay, np.tile(q, (n, 1)), np.zeros((n, 3)), seed=0, extra=ex)
+            log = simulate(pay, np.tile(q, (n, 1)), np.zeros((n, 3)), extra=ex)
             nf = ex["wheel_normal_force"].mean(0)
             st = static_state(q, pay)
             rows.append(dict(pose=pose, payload=pay, s_eq3=st["s"],

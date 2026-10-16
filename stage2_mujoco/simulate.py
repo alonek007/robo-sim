@@ -1,5 +1,5 @@
 """Stage 2: MuJoCo simulation. Writes logs in the common schema (analysis/logio.py)."""
-import sys, pathlib
+import sys, pathlib, hashlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 import numpy as np, pandas as pd
 import mujoco
@@ -15,10 +15,11 @@ assert abs(SUBSTEPS * P.MJ_TIMESTEP - P.DT) < 1e-12, "P.DT must be a multiple of
 _MODEL_CACHE = {}
 
 
-def get_model(payload):
-    if payload not in _MODEL_CACHE:
-        _MODEL_CACHE[payload] = mujoco.MjModel.from_xml_string(build_xml(payload))
-    return _MODEL_CACHE[payload]
+def get_model(payload, motor=None):
+    key = (payload, motor or P.DEFAULT_MOTOR)
+    if key not in _MODEL_CACHE:
+        _MODEL_CACHE[key] = mujoco.MjModel.from_xml_string(build_xml(payload, motor))
+    return _MODEL_CACHE[key]
 
 
 def _yaw(quat):
@@ -46,11 +47,11 @@ def arm_schedule(prof, q_req, payload, posture_rule):
     return q
 
 
-def simulate(payload, q_target_deg, v_cmd, seed, extra=None):
-    """Run the physics. q_target_deg, v_cmd: (N+1,3) per log row. Returns log DataFrame (+ extras dict if asked)."""
-    model = get_model(payload)
+def simulate(payload, q_target_deg, v_cmd, motor=None, extra=None):
+    """Run the physics (deterministic). q_target_deg, v_cmd: (N+1,3) per log row.
+    Returns the noise-free log DataFrame (see apply_noise); extras dict is filled if given."""
+    model = get_model(payload, motor)
     data = mujoco.MjData(model)
-    rng = np.random.default_rng(seed)
     jid = lambda n: model.joint(n).qposadr[0]
     vid = lambda n: model.joint(n).dofadr[0]
     arm = ["q1", "q2", "q3"]
@@ -89,9 +90,7 @@ def simulate(payload, q_target_deg, v_cmd, seed, extra=None):
     rec[:, 11] = np.unwrap(rec[:, 11])
     omega = np.zeros((n, 4))
     omega[:-1] = np.diff(wheel_ang, axis=0) / P.DT            # encoder-style interval average
-    omega += rng.normal(0, P.OMEGA_NOISE, omega.shape) * (np.arange(n) < n - 1)[:, None]
     rec[:, 1:5] = omega
-    rec[:, 8] += rng.normal(0, P.GYRO_NOISE, n)
     rec[:, 0] = np.arange(n) * P.DT
     df = pd.DataFrame(rec, columns=COLUMNS)
     if extra is not None:
@@ -118,7 +117,57 @@ def _wheel_normal_forces(model, data):
     return out
 
 
-def run_one(pose, payload, path, posture_rule, seed, extra=None):
+def apply_noise(log, seed):
+    """Encoder noise on omega and gyro noise on imu (the physics is deterministic, so repeats differ only by this)."""
+    rng = np.random.default_rng(seed)
+    out = log.copy()
+    n = len(out)
+    cols = ["omega1", "omega2", "omega3", "omega4"]
+    out[cols] = out[cols].values + rng.normal(0, P.OMEGA_NOISE, (n, 4)) * (np.arange(n) < n - 1)[:, None]
+    out["imu"] = out["imu"].values + rng.normal(0, P.GYRO_NOISE, n)
+    return out
+
+
+def clean_log(pose, payload, path, posture_rule, motor=None, extra=None):
     prof = paths.build(path)
     q = arm_schedule(prof, P.POSES[pose], payload, posture_rule)
-    return simulate(payload, q, prof["v_cmd"], seed, extra)
+    return simulate(payload, q, prof["v_cmd"], motor, extra)
+
+
+def run_one(pose, payload, path, posture_rule, seed, motor=None, extra=None):
+    return apply_noise(clean_log(pose, payload, path, posture_rule, motor, extra), seed)
+
+
+_ROOT = pathlib.Path(__file__).resolve().parents[1]
+_SRC_FILES = [_ROOT / "params.py", _ROOT / "paths.py", _ROOT / "model" / "posture.py", _ROOT / "model" / "com.py",
+              pathlib.Path(__file__), pathlib.Path(__file__).with_name("build_mjcf.py")]
+
+
+def cached_clean_log(pose, payload, path, posture_rule, motor=None, cache_root=_ROOT / "results" / "logs" / "stage2_clean"):
+    """clean_log with an on-disk cache. The file name carries a hash of the model XML and all source files that
+    influence the physics, so any change to them re-runs the simulation instead of returning stale data."""
+    motor = motor or P.DEFAULT_MOTOR
+    h = hashlib.sha1(build_xml(payload, motor).encode())
+    for f in _SRC_FILES:
+        h.update(f.read_bytes())
+    f = pathlib.Path(cache_root) / motor / f"{pose}_{payload:g}kg_{path}_{'rule' if posture_rule else 'norule'}_{h.hexdigest()[:10]}.csv"
+    if f.exists():
+        return pd.read_csv(f)[COLUMNS]
+    log = clean_log(pose, payload, path, posture_rule, motor)
+    f.parent.mkdir(parents=True, exist_ok=True)
+    for old in f.parent.glob(f"{pose}_{payload:g}kg_{path}_{'rule' if posture_rule else 'norule'}_*.csv"):
+        old.unlink()                                     # drop stale versions of this condition
+    log.to_csv(f, index=False)
+    return log
+
+
+def _job(args):
+    return cached_clean_log(*args)
+
+
+def prefetch(conditions, motor=None, processes=4):
+    """Fill the cache for many (pose, payload, path, rule) conditions in parallel."""
+    from multiprocessing import Pool
+    todo = [(*c, motor) for c in conditions]
+    with Pool(processes) as pool:
+        pool.map(_job, todo, chunksize=1)

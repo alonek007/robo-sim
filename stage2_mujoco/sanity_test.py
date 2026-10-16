@@ -36,7 +36,7 @@ def main():
     for name in ("forward", "strafe", "diagonal", "spin"):
         v, ang = profile(name)
         ex = {}
-        log = simulate(PAYLOAD, np.tile(P.POSES[POSE], (len(v), 1)), v, seed=0, extra=ex)
+        log = simulate(PAYLOAD, np.tile(P.POSES[POSE], (len(v), 1)), v, extra=ex)
         zrp = ex["z_roll_pitch"]; cruise = slice(int(P.RAMP_T / P.DT) + 20, len(v) - int(P.RAMP_T / P.DT) - 20)
         ripple[name] = (np.ptp(zrp[cruise, 0]) * 1e3, np.degrees(np.ptp(zrp[cruise, 1])), np.degrees(np.ptp(zrp[cruise, 2])))
         gt = relative_gt(log)
