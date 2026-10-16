@@ -39,6 +39,36 @@ def test_clip_when_unstable():
     assert n.min() == 0.0 and n.sum() > 0
 
 
+def test_ik_pinv_roundtrip():
+    from model.mecanum import wheel_speeds, standard_odometry
+    v = np.array([0.2, -0.1, 0.3])
+    assert np.allclose(standard_odometry(wheel_speeds(v)), v)
+
+
+def test_reduces_to_standard_odometry():
+    from model.mecanum import wheel_speeds, standard_odometry
+    from model.load_aware import body_velocity, SlipParams
+    om = wheel_speeds([0.2, 0.05, 0.1])
+    N = np.full(4, 4.4)
+    v = body_velocity(om, N, 1.78, SlipParams(kappa=0.0, c=15.0, f_r=0.0))
+    assert np.allclose(v, standard_odometry(om))
+
+
+def test_yaw_coupling_mechanism():
+    """Yaw drift needs CoM offset *perpendicular* to travel; none when CoM is on the travel line."""
+    from model.mecanum import wheel_speeds
+    from model.load_aware import body_velocity
+    def wz(v, q, pay=0.4):
+        s = static_state(q, pay)
+        return body_velocity(wheel_speeds(v), s["N"], s["M"])[2]
+    fwd, side = P.POSES["forward"], P.POSES["side"]
+    assert abs(wz([0.2, 0, 0], fwd)) < 1e-9          # arm forward, drive forward
+    assert abs(wz([0, 0.2, 0], side)) < 1e-9         # arm sideways, drive sideways
+    assert abs(wz([0, 0.2, 0], fwd)) > 1e-4          # arm forward, strafe  (H1)
+    assert abs(wz([0.2, 0, 0], side)) > 1e-4         # arm sideways, drive forward (H2)
+    assert wz([0, 0.2, 0], fwd) * wz([0, -0.2, 0], fwd) < 0   # sign flips with direction
+
+
 if __name__ == "__main__":
     for name, fn in list(globals().items()):
         if name.startswith("test_"):
