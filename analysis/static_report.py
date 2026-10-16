@@ -7,7 +7,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import params as P
 from model.arm import arm_points
-from model.com import static_state
+from model.com import static_state, joint_gravity_torques
 
 OUT = pathlib.Path(__file__).resolve().parents[1] / "results"
 
@@ -17,8 +17,9 @@ def table():
     for name, q in P.POSES.items():
         for pay in P.PAYLOADS:
             s = static_state(q, pay)
+            t2, t3 = joint_gravity_torques(q, pay)
             rows.append(dict(pose=name, q1=q[0], q2=q[1], q3=q[2], payload=pay, M=s["M"],
-                             x_c_mm=1e3 * s["x_c"], y_c_mm=1e3 * s["y_c"], s=s["s"],
+                             tau_shoulder_Nm=t2, tau_elbow_Nm=t3, x_c_mm=1e3 * s["x_c"], y_c_mm=1e3 * s["y_c"], s=s["s"],
                              **{f"N_{w}": n for w, n in zip(P.WHEEL_NAMES, s["N"])}))
     return pd.DataFrame(rows)
 

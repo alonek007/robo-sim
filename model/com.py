@@ -42,3 +42,15 @@ def static_state(q_deg, payload):
     m, com = total_mass_and_com(q_deg, payload)
     return {"M": m, "x_c": com[0], "y_c": com[1], "z_c": com[2],
             "N": wheel_loads(m, com[0], com[1]), "s": stability_margin(com[0], com[1])}
+
+
+def joint_gravity_torques(q_deg, payload):
+    """Static gravity torque [N m] about the shoulder (q2) and elbow (q3) axes, magnitude, for feasibility checks."""
+    p = arm_points(q_deg)
+    q1 = np.radians(q_deg[0])
+    rho = lambda pt: pt[0] * np.cos(q1) + pt[1] * np.sin(q1)        # horizontal distance along the arm plane
+    fore = [(P.BRACKET_MASS, p["link3_mid"]), (P.GRIPPER_SERVO_MASS, p["tip"]), (payload, p["tip"])]
+    upper = [(P.BRACKET_MASS, p["link2_mid"]), (P.SERVO_MASS, p["elbow"])]
+    tau3 = P.G * sum(m * (rho(pt) - rho(p["elbow"])) for m, pt in fore)
+    tau2 = P.G * sum(m * rho(pt) for m, pt in upper + fore)
+    return abs(tau2), abs(tau3)

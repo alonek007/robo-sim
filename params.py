@@ -86,9 +86,12 @@ WHEEL_ARMATURE = 5e-4               # kg m^2, reflected motor inertia
 WHEEL_KV = 0.05                     # N m s/rad: small geared DC motor, tau = kv (w_cmd - w); stall 0.6 N m / no-load 12 rad/s
 WHEEL_TORQUE_LIMIT = 0.6            # N m
 SERVO_BOX_HALF = (0.02, 0.01, 0.02) # servo body, mass SERVO_MASS
-ARM_KP = 20.0                       # N m/rad  position servo gain
-ARM_KV = 1.0                        # N m s/rad
-ARM_TORQUE_LIMIT = 1.0              # N m  (MG996R ~1 N m)
+MG996R_STALL_TORQUE = 1.0           # N m (~10-11 kg cm): reference only, used in the pose-feasibility report
+ARM_KP = 100.0                      # N m/rad  position servo gain
+ARM_KV = 3.0                        # N m s/rad
+ARM_TORQUE_LIMIT = 3.0              # N m  IDEALISED: an MG996R (~1 N m) cannot hold the forward/side-extended 0.4 kg poses
+                                    # (needs ~1.3 N m, see results/step5_load_check.csv); the simulation assumes the arm holds
+                                    # its pose so that the study isolates the base-slip effect
 ARM_DAMPING = 0.2
 ARM_ARMATURE = 1e-3
 PAYLOAD_RADIUS = 0.02
