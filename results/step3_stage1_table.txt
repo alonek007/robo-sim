@@ -1,0 +1,19 @@
+Stage 1, payload 0.4 kg, mean over 5 repeats (corrected = oracle parameters)
+
+   pose     path  drift_deg  drift_sd  err_std_mm  err_cor_mm  hd_err_std  hd_err_cor  drift_rule_deg
+ tucked  forward     -0.112     0.199      22.007       2.520       0.111       0.111          -0.112
+ tucked   strafe     -0.104     0.199      21.576       2.383       0.102       0.111          -0.112
+ tucked diagonal     -0.107     0.199      21.746       2.506       0.105       0.111          -0.112
+ tucked   square     -0.015     0.320       4.133       4.141       0.008       0.006          -0.015
+forward  forward     -0.112     0.199      26.136       2.480       0.111       0.109          -0.112
+forward   strafe      1.218     0.199      30.201       2.372      -1.219       0.111          -0.112
+forward diagonal      0.818     0.199      27.762       2.498      -0.820       0.111          -0.112
+forward   square     -0.015     0.320      22.128       4.779       0.008      -0.026          -0.015
+   side  forward     -1.442     0.199      31.656       2.499       1.440       0.110          -0.112
+   side   strafe     -0.112     0.199      25.710       2.386       0.111       0.109          -0.112
+   side diagonal     -1.043     0.199      28.395       2.487       1.041       0.110          -0.112
+   side   square     -0.015     0.320      24.882       3.760       0.008       0.014          -0.015
+ raised  forward     -0.112     0.199      22.986       2.518       0.111       0.110          -0.112
+ raised   strafe      0.020     0.199      22.643       2.386      -0.022       0.111          -0.112
+ raised diagonal     -0.019     0.199      22.762       2.507       0.018       0.111          -0.112
+ raised   square     -0.015     0.320       3.863       4.220       0.008      -0.003          -0.015

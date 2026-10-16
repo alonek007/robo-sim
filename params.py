@@ -52,5 +52,19 @@ SPEED = 0.2                    # m/s
 LEG = 1.0                      # m
 RAMP_T = 0.5                   # s   acceleration ramp
 CORNER_PAUSE = 0.5             # s   stop at square corners
+# leg directions (deg, in the body/start frame; heading is held at 0 - holonomic square, plan Q3)
+PATH_LEG_ANGLES_DEG = {
+    "forward":  (0.0,),
+    "strafe":   (90.0,),
+    "diagonal": (45.0,),
+    "square":   (0.0, 90.0, 180.0, 270.0),
+}
 DT = 0.01                      # s   logging / stage-1 integration step
 N_REPEATS = 5
+
+# ---- experiment modes: (odometry estimator, posture rule active in the physical run) ----
+MODES = {
+    "baseline":            ("standard",  False),
+    "corrected":           ("corrected", False),
+    "corrected+posture":   ("corrected", True),
+}
